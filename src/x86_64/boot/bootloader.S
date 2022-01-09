@@ -82,19 +82,19 @@ return: ret			; Return label.
 ; Disk load label.
 ; Loads DH sectors into the memory address at BX.
 disk_load:
-	push dx 			; Save DX on stack so we do not change DH if modified.
-	mov ah, 0x02 		; BIOS read sectors routine.
-	mov al, dh			; Read DH sectors.
-	mov ch, 0x00		; Select cylinder 0.
-	mov dh, 0x00 		; Select head 0.
-	mov cl, [READ_FROM] ; Start reading after sector 2.
-	int 0x13			; BIOS interrupt.
+	push dx 				; Save DX on stack so we do not change DH if modified.
+	mov ah, 0x02 			; BIOS read sectors routine.
+	mov al, dh				; Read DH sectors.
+	mov ch, 0x00			; Select cylinder 0.
+	mov dh, 0x00 			; Select head 0.
+	mov cl, [READ_FROM] 	; Start reading after sector 2.
+	int 0x13				; BIOS interrupt.
 
-	jc disk_error   	; If an oopsie happens then we jump to this label.
+	jc disk_error   		; If an oopsie happens then we jump to this label.
 
 	pop dx
-	cmp dh, al			; AL (sectors read), DH sectors expected. DH is most significant byte of DX.
-	jne disk_error		; Error message & halt CPU.
+	cmp dh, al				; AL (sectors read), DH sectors expected. DH is most significant byte of DX.
+	jne disk_error			; Error message & halt CPU.
 	ret
 
 ; If we fail to read disk we jump to here.
